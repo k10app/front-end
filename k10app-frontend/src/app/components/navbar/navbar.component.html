@@ -1,0 +1,42 @@
+<nav class="navbar navbar-expand navbar-dark bg-primary mb-4">
+  <div class="container-fluid">
+    <a class="navbar-brand" routerLink="/">
+      <img src="assets/k10_image.png" alt="Logo" width="80" class="d-inline-block align-text-top">
+    </a>
+    <div class="collapse navbar-collapse" id="navbarText">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a routerLinkActive="active" routerLink="/" class="nav-link">Home</a>
+        </li>
+        <li class="nav-item">
+          <a routerLinkActive="active" routerLink="/store" class="nav-link">Store</a>
+        </li>
+        <li class="nav-item" *ngIf="isAuth$">
+          <a routerLink="/" class="nav-link"
+          >Logout</a
+          >
+        </li>
+        <li class="nav-item" *ngIf="!isAuth$">
+          <a routerLinkActive="active" routerLink="/checkout" class="nav-link"
+          >Checkout</a
+          >
+        </li>
+        <li class="nav-item" *ngIf="!isAuth$">
+          <a routerLinkActive="active" routerLink="/orders" class="nav-link"
+          >Orders</a
+          >
+        </li>
+        <li class="nav-item" *ngIf="!isAuth$">
+          <a routerLinkActive="active" routerLink="/login" class="nav-link"
+          >Login</a
+          >
+        </li>
+        <li class="nav-item" *ngIf="!isAuth$">
+          <a routerLinkActive="active" routerLink="/register" class="nav-link"
+          >Register</a
+          >
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
