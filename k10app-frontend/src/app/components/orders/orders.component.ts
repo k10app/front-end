@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { OrderItem } from "../../../models/Orders-models";
+import { OrdersService } from "../../services/orders.service";
 
 @Component({
   selector: 'app-orders',
@@ -6,54 +8,32 @@ import { Component } from '@angular/core';
   styleUrls: ['./orders.component.css']
 })
 export class OrdersComponent {
-  orders = [
-    {
-      orderNum: 1,
-      totalPrice: 32.97,
-      orderItems: [
-        {
-          name: "Coffee Cup",
-          description: "A really nice cup of coffee can be had with this.",
-          image: "",
-          price: 10.99,
-        },
-        {
-          name: "K10 T-Shirt",
-          description: "The best t-shirt ever!",
-          image: "",
-          price: 10.99,
-        },
-        {
-          name: "K10 Baseball bat",
-          description: "Yes, even a baseball bat!",
-          image: "",
-          price: 10.99,
-        }
-      ]
-    },
-    {
-      orderNum: 2,
-      totalPrice: 32.97,
-      orderItems: [
-        {
-          name: "Coffee Cup",
-          description: "A really nice cup of coffee can be had with this.",
-          image: "",
-          price: 10.99,
-        },
-        {
-          name: "K10 T-Shirt",
-          description: "The best t-shirt ever!",
-          image: "",
-          price: 10.99,
-        },
-        {
-          name: "K10 Baseball bat",
-          description: "Yes, even a baseball bat!",
-          image: "",
-          price: 10.99,
-        }
-      ]
+  orders: OrderItem[] = [
+      {
+        userId: "abcd",
+        orderNumber: "1234",
+        totalPrice: 13.33,
+        orderItems: [
+          {
+            quantity: 1,
+            storeItem: {
+              id: 1,
+              name: "banana",
+              price: 1.99,
+              summary: "",
+              description: "hello",
+              imgurl: "",
+              stock: 1
+            }
+          }
+        ]
+      }
+    ]
+
+    constructor(private ordersService: OrdersService) {
     }
-  ]
+
+    ngOnInit() {
+      this.orders = this.ordersService.getOrders()
+    }
 }

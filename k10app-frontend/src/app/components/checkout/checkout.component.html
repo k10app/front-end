@@ -2,38 +2,45 @@
 <div class="row">
   <div class="card">
     <div class="card-body">
-      <table class="table">
+      <table class="table" *ngIf="cart.length > 0; else noCart">
         <thead>
         <tr>
           <th scope="col">#</th>
+          <th scope="col">Quantity</th>
           <th scope="col">Name</th>
-          <th scope="col">Price</th>
+          <th scope="col">Price £</th>
+          <th scope="col">Subtotal £</th>
           <th scope="col">Remove</th>
         </tr>
         </thead>
-        <tbody *ngFor="let item of basket; let i = index">
+        <tbody *ngFor="let item of cart; let i = index">
         <tr>
           <th scope="row">{{i}}</th>
-          <td>{{item.name}}</td>
-          <td>{{item.price}}</td>
+          <td>{{item.quantity}}</td>
+          <td>{{item.storeItem.name}}</td>
+          <td>{{item.storeItem.price}}</td>
+          <td>{{item.storeItem.price * item.quantity}}</td>
           <td><button class="btn btn-outline-dark btn-sm" (click)=onDelete(i)><i class="bi bi-trash"></i></button></td>
         </tr>
         </tbody>
-
       </table>
+      <ng-template #noCart>
+        <h3>No items in cart</h3>
+      </ng-template>
     </div>
   </div>
 </div>
 
-<div class="row mt-3">
-  <div class="card">
-    <div class="card-body">
-      <h3>Total price: £{{totalPrice}}</h3>
+<div *ngIf="cart.length > 0">
+  <div class="row mt-3">
+    <div class="card">
+      <div class="card-body">
+        <h3>Total price: £{{totalPrice}}</h3>
+      </div>
     </div>
   </div>
-</div>
 
-<div class="row mt-4">
-  <button type="button" class="btn btn-primary" [disabled]="basket.length < 1">Place Order</button>
+  <div class="row mt-4">
+    <button type="button" class="btn btn-primary" [disabled]="cart.length < 1" (click)="placeOrder()">Place Order</button>
+  </div>
 </div>
-

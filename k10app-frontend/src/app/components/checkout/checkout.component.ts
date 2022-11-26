@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { CartItem } from "../../../models/Orders-models";
+import { OrdersService } from "../../services/orders.service";
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-checkout',
@@ -6,43 +9,51 @@ import { Component } from '@angular/core';
   styleUrls: ['./checkout.component.css']
 })
 export class CheckoutComponent {
-  basket = [
-    {
-      name: "Coffee Cup",
-      description: "A really nice cup of coffee can be had with this.",
-      image: "",
-      price: 10.99,
-    },
-    {
-      name: "K10 T-Shirt",
-      description: "The best t-shirt ever!",
-      image: "",
-      price: 10.99,
-    },
-    {
-      name: "K10 Baseball bat",
-      description: "Yes, even a baseball bat!",
-      image: "",
-      price: 10.99,
-    }
+  cart: CartItem[] = [
   ]
-  totalPrice = 0
+  totalPrice = 0;
+
+  constructor(private orders: OrdersService) {
+  }
+
 
   ngOnInit() {
+    this.cart = this.orders.getCart();
     this.calculateTotal();
   };
 
   calculateTotal() {
-    if(this.basket.length < 1) {
-      this.totalPrice = 0;
-    } else {
-      this.totalPrice = this.basket.map(i => i.price).reduce((p, c) => p + c);
-    }
+    this.totalPrice = 0;
+    if(this.cart.length > 0) {
+      this.cart.forEach((i) => {
+        this.totalPrice += i.quantity * i.storeItem.price;
+      })
+  }};
 
+  placeOrder() {
+    this.orders.addOrder("123", "abc", this.totalPrice);
+    this.cart = [];
   }
 
   onDelete(index: number) {
-    this.basket.splice(index, 1);
-    this.calculateTotal();
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.cart = this.orders.deleteCartItem(index);
+        this.calculateTotal();
+        Swal.fire(
+          'Deleted!',
+          'Your file has been deleted.',
+          'success'
+        )
+      }
+    })
   }
 }

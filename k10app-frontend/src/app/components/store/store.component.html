@@ -1,8 +1,10 @@
-<div *ngFor="let item of dummyData">
+<div *ngFor="let item of stockItems; let i = index">
   <div class="card mb-3">
     <div class="card-body">
       <h3>{{item.name}}</h3>
       <p>{{item.description}}</p>
+      <input type="number" value="0" #quantity class="me-2">
+      <button class="btn btn-primary btn-sm" (click)="onAddItem(item, quantity.value)">Add to basket</button>
     </div>
   </div>
 </div>

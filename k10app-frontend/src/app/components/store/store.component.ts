@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import {OrdersService} from "../../services/orders.service";
+import {StoreItem} from "../../../models/Orders-models";
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-store',
@@ -6,24 +9,22 @@ import { Component } from '@angular/core';
   styleUrls: ['./store.component.css']
 })
 export class StoreComponent {
-  dummyData = [
-    {
-      name: "Coffee Cup",
-      description: "A really nice cup of coffee can be had with this.",
-      image: "",
-      price: 10.99,
-    },
-    {
-      name: "K10 T-Shirt",
-      description: "The best t-shirt ever!",
-      image: "",
-      price: 10.99,
-    },
-    {
-      name: "K10 Baseball bat",
-      description: "Yes, even a baseball bat!",
-      image: "",
-      price: 10.99,
-    }
-  ]
+  stockItems: StoreItem[] = [];
+  constructor(private orders: OrdersService) {
+  }
+
+  ngOnInit() {
+    this.orders.getCatalogue().subscribe((data) => this.stockItems = data);
+  }
+
+  onAddItem(storeItem: StoreItem, quantity: string) {
+    this.orders.addToCart(storeItem, parseInt(quantity));
+    Swal.fire({
+      position: 'top-end',
+      icon: 'success',
+      title: 'Item has been added!',
+      showConfirmButton: false,
+      timer: 1500
+    })
+  }
 }
