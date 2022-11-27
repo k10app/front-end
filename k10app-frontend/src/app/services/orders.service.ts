@@ -17,10 +17,6 @@ export class OrdersService {
 
   constructor(private http: HttpClient) { }
 
-  getCatalogue() {
-    return this.http.get<StoreItem[]>("http://localhost:3001/catalog/list");
-  }
-
   addToCart(storeItem: StoreItem, quantity: number) {
     const cartItem: CartItem = {
       storeItem,

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CartItem } from "../../../models/Orders-models";
 import { OrdersService } from "../../services/orders.service";
 import Swal from 'sweetalert2';
+import {ProductsService} from "../../services/products.service";
 
 @Component({
   selector: 'app-checkout',
@@ -13,7 +14,7 @@ export class CheckoutComponent {
   ]
   totalPrice = 0;
 
-  constructor(private orders: OrdersService) {
+  constructor(private orders: OrdersService, private productsService: ProductsService) {
   }
 
 
@@ -31,7 +32,17 @@ export class CheckoutComponent {
   }};
 
   placeOrder() {
+    const cart = this.orders.getCart()
+    this.productsService.updateCatalogue(cart).subscribe(data => console.log(data));
     this.orders.addOrder("123", "abc", this.totalPrice);
+
+    Swal.fire({
+      title: 'Success!',
+      text: 'Your Order has been placed!',
+      icon: 'success',
+      showConfirmButton: false,
+      timer: 1500
+    })
     this.cart = [];
   }
 

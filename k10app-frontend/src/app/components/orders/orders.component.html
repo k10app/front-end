@@ -1,4 +1,5 @@
 <h2>Orders</h2>
+<div *ngIf="orders.length > 0; else noOrders">
 <div class="row">
   <div class="card mb-4" *ngFor="let item of orders">
     <div class="card-body">
@@ -29,3 +30,16 @@
     </div>
   </div>
 </div>
+</div>
+<ng-template #noOrders>
+  <div class="row">
+    <div class="col">
+      <div class="card">
+        <div class="card-body">
+          <h5>No Orders Yet!</h5>
+          <button class="btn btn-success btn-sm" routerLink="/store">Store</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

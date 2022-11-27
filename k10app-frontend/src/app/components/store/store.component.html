@@ -1,10 +1,35 @@
 <div *ngFor="let item of stockItems; let i = index">
   <div class="card mb-3">
     <div class="card-body">
-      <h3>{{item.name}}</h3>
-      <p>{{item.description}}</p>
-      <input type="number" value="0" #quantity class="me-2">
-      <button class="btn btn-primary btn-sm" (click)="onAddItem(item, quantity.value)">Add to basket</button>
+      <div class="row">
+        <div class="col-3 text-center">
+          <img [src]="item.imgurl" alt="" width="300">
+        </div>
+        <div class="col">
+          <div class="row">
+            <h3>{{item.name}}</h3>
+            <p>{{item.description}}</p>
+          </div>
+          <div class="row mb-2">
+            <div class="col">
+              <span class="badge text-bg-success me-1" *ngIf="item.stock > 0; else noStock">{{item.stock}} In Stock</span>
+              <ng-template #noStock>
+                <span class="badge text-bg-secondary me-1">Out of Stock</span>
+              </ng-template>
+            </div>
+          </div>
+          <div clas="row">
+            <div class="col-3">
+              <input type="number" value="0" #quantity min=0 [max]="item.stock" class="form-control me-2" [disabled]="item.stock < 1">
+            </div>
+          </div>
+          <div class="row mt-2">
+            <div class="col">
+              <button class="btn btn-primary btn-sm" (click)="onAddItem(item, quantity.value)" [disabled]="item.stock < 1">Add to basket</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

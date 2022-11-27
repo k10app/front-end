@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import {OrdersService} from "../../services/orders.service";
+import {ProductsService} from "../../services/products.service";
 import {StoreItem} from "../../../models/Orders-models";
 import Swal from 'sweetalert2';
 
@@ -10,11 +11,11 @@ import Swal from 'sweetalert2';
 })
 export class StoreComponent {
   stockItems: StoreItem[] = [];
-  constructor(private orders: OrdersService) {
+  constructor(private orders: OrdersService, private productService: ProductsService) {
   }
 
   ngOnInit() {
-    this.orders.getCatalogue().subscribe((data) => this.stockItems = data);
+    this.productService.getCatalogue().subscribe((data) => this.stockItems = data);
   }
 
   onAddItem(storeItem: StoreItem, quantity: string) {
