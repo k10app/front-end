@@ -32,8 +32,14 @@ export class CheckoutComponent {
   }};
 
   placeOrder() {
-    const cart = this.orders.getCart()
-    this.productsService.updateCatalogue(cart).subscribe(data => console.log(data));
+    const cart = this.orders.getCart();
+    // update the stock in each of the cart items
+    this.cart.forEach((i) => {
+      i.storeItem.stock = i.storeItem.stock - i.quantity
+    });
+    this.cart.forEach((i) => {
+      this.productsService.updateCatalogue(i.storeItem).subscribe(data => console.log(data));
+    })
     this.orders.addOrder("123", "abc", this.totalPrice);
 
     Swal.fire({
@@ -61,7 +67,7 @@ export class CheckoutComponent {
         this.calculateTotal();
         Swal.fire(
           'Deleted!',
-          'Your file has been deleted.',
+          'The item was deleted.',
           'success'
         )
       }

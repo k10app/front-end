@@ -1,5 +1,5 @@
 export interface StoreItem {
-  id: number,
+  _id: number,
   name: string,
   price: number,
   summary: string,

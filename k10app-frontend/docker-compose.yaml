@@ -1,0 +1,60 @@
+services:
+  front-end:
+    container_name: store-frontend
+    image: txtxx56/store-frontend
+    restart: always
+    environment:
+      - baseUrl=127.0.0.1
+    ports:
+      - "80:80"
+    links:
+      - catalog
+    depends_on:
+      - catalog
+  catalog:
+    container_name: catalog-service
+    image: txtxx56/catalog
+    restart: always
+    volumes:
+      - C:\k10app\:/catalog/certificates
+    ports:
+      - "3001:80"
+    links:
+      - mongo
+    depends_on:
+      - mongo
+    environment:
+      - MONGODB_HOST=192.168.0.8
+  mongo:
+    container_name: mongo
+    restart: always
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - C:\k10app\mongo:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=mongoadmin,
+      - MONGO_INITDB_ROOT_PASSWORD=secret
+  bus:
+    container_name: bus
+    restart: always
+    image: ghcr.io/k10app/basicuserservice
+    volumes:
+      - C:\k10app:/basicuserservice/certificates
+    environment:
+      - MARIADB_HOST=192.168.0.8
+      - name=bus
+    ports:
+      - "3002:80"
+  maria:
+    container_name: maria
+    restart: always
+    image: mariadb:latest
+    ports:
+      - "3306:3306"
+    environment:
+      - MARIADB_DATABASE=userdb
+      - MARIADB_USER=userdblogin
+      - MARIADB_PASSWORD=userdbpassword
+      - MARIADB_ROOT_PASSWORD=userdbrootpass

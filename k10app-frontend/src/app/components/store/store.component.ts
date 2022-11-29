@@ -3,6 +3,7 @@ import {OrdersService} from "../../services/orders.service";
 import {ProductsService} from "../../services/products.service";
 import {StoreItem} from "../../../models/Orders-models";
 import Swal from 'sweetalert2';
+import {UserService} from "../../services/user.service";
 
 @Component({
   selector: 'app-store',
@@ -11,11 +12,13 @@ import Swal from 'sweetalert2';
 })
 export class StoreComponent {
   stockItems: StoreItem[] = [];
-  constructor(private orders: OrdersService, private productService: ProductsService) {
+  isAuth = false;
+  constructor(private orders: OrdersService, private productService: ProductsService, private userService: UserService) {
   }
 
   ngOnInit() {
     this.productService.getCatalogue().subscribe((data) => this.stockItems = data);
+    this.isAuth = this.userService.getAuth();
   }
 
   onAddItem(storeItem: StoreItem, quantity: string) {

@@ -11,31 +11,36 @@
         <li class="nav-item">
           <a routerLinkActive="active" routerLink="/store" class="nav-link">Store</a>
         </li>
-        <li class="nav-item" *ngIf="isAuth$">
-          <a routerLink="/" class="nav-link"
-          >Logout</a
-          >
-        </li>
-        <li class="nav-item" *ngIf="!isAuth$">
-          <a routerLinkActive="active" routerLink="/checkout" class="nav-link"
-          >Checkout</a
-          >
-        </li>
-        <li class="nav-item" *ngIf="!isAuth$">
-          <a routerLinkActive="active" routerLink="/orders" class="nav-link"
-          >Orders</a
-          >
-        </li>
-        <li class="nav-item" *ngIf="!isAuth$">
-          <a routerLinkActive="active" routerLink="/login" class="nav-link"
-          >Login</a
-          >
-        </li>
-        <li class="nav-item" *ngIf="!isAuth$">
-          <a routerLinkActive="active" routerLink="/register" class="nav-link"
-          >Register</a
-          >
-        </li>
+        <ng-container *ngIf="isAuth">
+          <li class="nav-item">
+            <a routerLinkActive="active" routerLink="/checkout" class="nav-link"
+            >Checkout</a
+            >
+          </li>
+
+          <li class="nav-item">
+            <a routerLinkActive="active" routerLink="/orders" class="nav-link"
+            >Orders</a
+            >
+          </li>
+          <li class="nav-item">
+            <a routerLink="/" class="nav-link"
+            >Logout</a
+            >
+          </li>
+        </ng-container>
+        <ng-container *ngIf="!isAuth">
+          <li class="nav-item" *ngIf="!isAuth">
+            <a routerLinkActive="active" routerLink="/login" class="nav-link"
+            >Login</a
+            >
+          </li>
+          <li class="nav-item" *ngIf="!isAuth">
+            <a routerLinkActive="active" routerLink="/register" class="nav-link"
+            >Register</a
+            >
+          </li>
+        </ng-container>
       </ul>
     </div>
   </div>

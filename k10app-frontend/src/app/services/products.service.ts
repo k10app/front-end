@@ -11,11 +11,11 @@ export class ProductsService {
   constructor(private http: HttpClient) { }
 
   getCatalogue() {
-    return this.http.get<StoreItem[]>("http://localhost:3001/catalog/list");
+    return this.http.get<StoreItem[]>(`http://${location.hostname}:3001/catalog/list`);
   }
 
-  updateCatalogue(updatedItems: CartItem[]) {
+  updateCatalogue(updatedItem: StoreItem) {
 
-    return this.http.put<CartItem[]>("http://localhost:3001/catalog/updateItems", updatedItems);
+    return this.http.put<StoreItem>(`http://${location.hostname}:3001/catalog/update`, updatedItem);
   }
 }

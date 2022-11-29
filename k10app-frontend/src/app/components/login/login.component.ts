@@ -2,6 +2,9 @@ import { Component } from '@angular/core';
 import {FormBuilder, Validators} from "@angular/forms";
 import { UserService } from "../../services/user.service";
 import {Router} from '@angular/router';
+import {LoginData} from "../../../models/Auth-models";
+import Swal from 'sweetalert2';
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -9,7 +12,7 @@ import {Router} from '@angular/router';
 })
 export class LoginComponent {
   loginForm = this.fb.group({
-    username: ['', [Validators.required, Validators.minLength(3)]],
+    login: ['', [Validators.required, Validators.minLength(3)]],
     password: ['', [Validators.required, Validators.minLength(4)]]
   })
 
@@ -17,11 +20,15 @@ export class LoginComponent {
 
   loginProcess() {
     if(this.loginForm.valid) {
-      this.userService.login(this.loginForm.value).subscribe(result => {
-        console.log(result);
-        this.router.navigate(["/store"])
-      })
+      const verified = this.userService.login(<LoginData>this.loginForm.value);
+      if(verified) {
+        this.router.navigate(['/', 'store']);
+      }
+    } else {
+      alert("Form is missing stuff");
     }
   }
+
+
 
 }

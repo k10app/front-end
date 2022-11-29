@@ -17,7 +17,7 @@ export class OrdersComponent {
           {
             quantity: 1,
             storeItem: {
-              id: 1,
+              _id: 1,
               name: "banana",
               price: 1.99,
               summary: "",
