@@ -24,18 +24,16 @@
             >
           </li>
           <li class="nav-item">
-            <a routerLink="/" class="nav-link"
-            >Logout</a
-            >
+            <button class="btn btn-primary" (click)="logout()">Logout</button>
           </li>
         </ng-container>
         <ng-container *ngIf="!isAuth">
-          <li class="nav-item" *ngIf="!isAuth">
+          <li class="nav-item">
             <a routerLinkActive="active" routerLink="/login" class="nav-link"
             >Login</a
             >
           </li>
-          <li class="nav-item" *ngIf="!isAuth">
+          <li class="nav-item">
             <a routerLinkActive="active" routerLink="/register" class="nav-link"
             >Register</a
             >

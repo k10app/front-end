@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { CartItem } from "../../../models/Orders-models";
 import { OrdersService } from "../../services/orders.service";
 import Swal from 'sweetalert2';
@@ -9,7 +9,7 @@ import {ProductsService} from "../../services/products.service";
   templateUrl: './checkout.component.html',
   styleUrls: ['./checkout.component.css']
 })
-export class CheckoutComponent {
+export class CheckoutComponent implements OnInit {
   cart: CartItem[] = [
   ]
   totalPrice = 0;

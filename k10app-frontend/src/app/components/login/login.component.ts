@@ -4,6 +4,7 @@ import { UserService } from "../../services/user.service";
 import {Router} from '@angular/router';
 import {LoginData} from "../../../models/Auth-models";
 import Swal from 'sweetalert2';
+import {isCI} from "@angular/cli/src/utilities/environment-options";
 
 @Component({
   selector: 'app-login',
@@ -20,12 +21,39 @@ export class LoginComponent {
 
   loginProcess() {
     if(this.loginForm.valid) {
-      const verified = this.userService.login(<LoginData>this.loginForm.value);
-      if(verified) {
-        this.router.navigate(['/', 'store']);
-      }
+      this.userService.login(<LoginData>this.loginForm.value)
+        .subscribe({
+          next: (res) => {
+            if(res.status == "ok") {
+              this.userService.sendAuth.next(true);
+              localStorage.setItem("jwt", res.jwt);
+              localStorage.setItem("isAuth", "true");
+              Swal.fire({
+                position: 'top-end',
+                icon: 'success',
+                title: 'Login Successful!',
+                showConfirmButton: false,
+                timer: 1500
+              });
+              setTimeout( () =>{
+                this.router.navigate(['/', 'store']);
+              }, 1500);
+            }
+          },
+          error: (error) => {
+            Swal.fire({
+              icon: "error",
+              title: "Login Error",
+              text: error
+            })
+          }
+        })
     } else {
-      alert("Form is missing stuff");
+      Swal.fire({
+        icon: "error",
+        title: "Form Error",
+        text: "Data missing from form"
+      })
     }
   }
 

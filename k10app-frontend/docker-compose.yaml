@@ -9,8 +9,10 @@ services:
       - "80:80"
     links:
       - catalog
+      - bus
     depends_on:
       - catalog
+      - bus
   catalog:
     container_name: catalog-service
     image: txtxx56/catalog
@@ -39,7 +41,7 @@ services:
   bus:
     container_name: bus
     restart: always
-    image: ghcr.io/k10app/basicuserservice
+    image: txtxx56/basicuserservice
     volumes:
       - C:\k10app:/basicuserservice/certificates
     environment:
@@ -47,12 +49,18 @@ services:
       - name=bus
     ports:
       - "3002:80"
+    links:
+      - maria
+    depends_on:
+      - maria
   maria:
     container_name: maria
     restart: always
     image: mariadb:latest
     ports:
       - "3306:3306"
+    volumes:
+      - C:\k10app\basicUser:/var/lib/mysql
     environment:
       - MARIADB_DATABASE=userdb
       - MARIADB_USER=userdblogin

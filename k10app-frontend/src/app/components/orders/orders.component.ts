@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { OrderItem } from "../../../models/Orders-models";
 import { OrdersService } from "../../services/orders.service";
 
@@ -7,7 +7,7 @@ import { OrdersService } from "../../services/orders.service";
   templateUrl: './orders.component.html',
   styleUrls: ['./orders.component.css']
 })
-export class OrdersComponent {
+export class OrdersComponent implements OnInit {
   orders: OrderItem[] = [
       {
         userId: "abcd",
