@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpErrorResponse, HttpResponse} from "@angular/common/http";
 import {Observable, throwError} from "rxjs";
-import {BASE_URL} from "../../environments/environments";
+import {USERS_URL} from "../../environments/environments";
 import { Subject } from 'rxjs';
 import {LoginData, LoginResult, UserRegister, CheckAuth} from "../../models/Auth-models";
 import {HttpHeaders} from "@angular/common/http";
@@ -32,40 +32,21 @@ export class UserService {
     return throwError(() => new Error('Something bad happened; please try again later.'));
   }
 
-  sendAlert(alertType: string, title: string, message: string) {
-    if (alertType == 'success') {
-      Swal.fire({
-        icon: alertType,
-        title: title,
-        text: message
-      })
-    };
-
-    if (alertType == 'error') {
-      Swal.fire({
-        icon: alertType,
-        title: title,
-        text: message
-      })
-    }
-
-  }
-
   login(data: LoginData): Observable<LoginResult> {
-    return this.http.post<LoginResult>(`${BASE_URL}/user/login`, data).pipe(
+    return this.http.post<LoginResult>(`${USERS_URL}/user/login`, data).pipe(
       catchError(this.handleError)
     )
   }
 
   register(data: UserRegister): Observable<LoginResult> {
-    return this.http.post<LoginResult>(`${BASE_URL}/user/register`, data).pipe(
+    return this.http.post<LoginResult>(`${USERS_URL}/user/register`, data).pipe(
       catchError(this.handleError)
     )
   }
 
   getAuth(jwt: string): Observable<CheckAuth> {
     const headers = new HttpHeaders().set("Authorization", jwt);
-    return this.http.get<CheckAuth>(`${BASE_URL}/user/verify`, {"headers": headers }).pipe(
+    return this.http.get<CheckAuth>(`${USERS_URL}/user/verify`, {"headers": headers }).pipe(
       catchError(this.handleError)
     )
   }

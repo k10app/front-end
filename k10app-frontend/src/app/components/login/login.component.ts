@@ -26,7 +26,8 @@ export class LoginComponent {
           next: (res) => {
             if(res.status == "ok") {
               this.userService.sendAuth.next(true);
-              localStorage.setItem("jwt", res.jwt);
+              const jwt_string = `Bearer ${res.jwt}`;
+              localStorage.setItem("jwt", jwt_string);
               localStorage.setItem("isAuth", "true");
               Swal.fire({
                 position: 'top-end',

@@ -25,8 +25,9 @@ export class RegisterComponent {
         .subscribe({
           next: (res) => {
             if(res.status == "ok") {
+              const jwt_string = `Bearer ${res.jwt}`;
+              localStorage.setItem("jwt", jwt_string);
               localStorage.setItem("isAuth", "true");
-              localStorage.setItem("jwt", res.jwt);
               this.userService.sendAuth.next(true);
               Swal.fire({
                 position: 'top-end',

@@ -17,5 +17,3 @@ FROM nginx:latest
 COPY --from=node /usr/src/app/dist/k10app-frontend /usr/share/nginx/html
 
 COPY ./nginx.conf /etc/nginx/conf.d/default.conf
-
-ENV baseUrl="https://b8b83cae-7bfe-4052-a97e-67fc7ea5acb3.mock.pstmn.io"

@@ -3,8 +3,6 @@ services:
     container_name: store-frontend
     image: txtxx56/store-frontend
     restart: always
-    environment:
-      - baseUrl=127.0.0.1
     ports:
       - "80:80"
     links:
@@ -66,3 +64,33 @@ services:
       - MARIADB_USER=userdblogin
       - MARIADB_PASSWORD=userdbpassword
       - MARIADB_ROOT_PASSWORD=userdbrootpass
+  orders:
+    container_name: orders
+    restart: always
+    image: txtxx56/order
+    ports:
+      - "3003:80"
+    volumes:
+      - C:\k10app:/order/certificates
+    environment:
+      - POSTGRES_HOST=postgres
+      - CATALOG_SERVER=catalog
+      - CATALOG_PORT=3001
+    links:
+      - catalog
+      - postgres
+    depends_on:
+      - catalog
+      - postgres
+  postgres:
+    container_name: postgres
+    restart: always
+    image: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - C:\k10app\postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=order
+      - POSTGRES_USER=orderlogin
+      - POSTGRES_PASSWORD=orderpassword
