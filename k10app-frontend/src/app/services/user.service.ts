@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpResponse} from "@angular/common/http";
-import {Observable} from "rxjs";
-import {BASE_URL} from "../../environments/environments";
+import {HttpClient, HttpErrorResponse, HttpResponse} from "@angular/common/http";
+import {Observable, throwError} from "rxjs";
+import {USERS_URL} from "../../environments/environments";
 import { Subject } from 'rxjs';
 import {LoginData, LoginResult, UserRegister, CheckAuth} from "../../models/Auth-models";
 import {HttpHeaders} from "@angular/common/http";
 import Swal from 'sweetalert2';
+import {catchError} from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root'
@@ -17,94 +18,50 @@ export class UserService {
 
   constructor(private http:HttpClient) { }
 
-  getLoginResponse(data: LoginData): Observable<HttpResponse<LoginResult>> {
-    return this.http.post<LoginResult>(`${BASE_URL}/user/login`, data, {observe: 'response'})
-  };
+  private handleError(error: HttpErrorResponse) {
+    if (error.status === 0) {
+      // A client-side or network error occurred. Handle it accordingly.
+      console.error('An error occurred:', error.error);
+    } else {
+      // The backend returned an unsuccessful response code.
+      // The response body may contain clues as to what went wrong.
+      console.error(
+        `Backend returned code ${error.status}, body was: `, error.error);
+    }
+    // Return an observable with a user-facing error message.
+    return throwError(() => new Error('Something bad happened; please try again later.'));
+  }
 
-  getRegisterResponse(data: UserRegister): Observable<HttpResponse<LoginResult>> {
-    return this.http.post<LoginResult>(`${BASE_URL}/user/register`, data, {observe: 'response'})
-  };
+  login(data: LoginData): Observable<LoginResult> {
+    return this.http.post<LoginResult>(`${USERS_URL}/user/login`, data).pipe(
+      catchError(this.handleError)
+    )
+  }
 
-  getVerifyAuth(jwt: string): Observable<HttpResponse<CheckAuth>> {
+  register(data: UserRegister): Observable<LoginResult> {
+    return this.http.post<LoginResult>(`${USERS_URL}/user/register`, data).pipe(
+      catchError(this.handleError)
+    )
+  }
+
+  getAuth(jwt: string): Observable<CheckAuth> {
     const headers = new HttpHeaders().set("Authorization", jwt);
-    return this.http.get<CheckAuth>(`${BASE_URL}/user/verify`, {"headers": headers, observe: "response"})
+    return this.http.get<CheckAuth>(`${USERS_URL}/user/verify`, {"headers": headers }).pipe(
+      catchError(this.handleError)
+    )
   }
 
-  sendAlert(alertType: string, title: string, message: string) {
-    if (alertType == 'success') {
-      Swal.fire({
-        icon: alertType,
-        title: title,
-        text: message
-      })
-    };
-
-    if (alertType == 'error') {
-      Swal.fire({
-        icon: alertType,
-        title: title,
-        text: message
-      })
+  checkAuth():boolean {
+    if(localStorage.getItem("isAuth") !== null && localStorage.getItem("isAuth") == "true") {
+      this.isAuth = true
     }
-
-  }
-
-  deleteJwt() {
-    if(localStorage.getItem("jwt") !== null) {
-      localStorage.removeItem("jwt")
-    };
-  }
-
-  login(data: LoginData): boolean {
-
-    this.getLoginResponse(data).subscribe(
-      (response) => {
-          this.isAuth = true;
-          let bearerString = `Bearer ${response.body?.jwt}`
-          localStorage.setItem("jwt", bearerString);
-      },
-      (error) => {
-        this.isAuth = false;
-        this.deleteJwt();
-        this.sendAlert("error", "Login Error", error)
-
-      })
-    this.sendAuth.next(this.isAuth);
     return this.isAuth
   }
 
-  register(data: UserRegister): boolean {
-
-    this.getRegisterResponse(data).subscribe(
-      (response) => {
-        this.isAuth = true;
-        let bearerString = `Bearer ${response.body?.jwt}`
-        localStorage.setItem("jwt", bearerString);
-        this.sendAuth.next(this.isAuth);
-      },
-      (error) => {
-        this.isAuth = false;
-        this.deleteJwt();
-        this.sendAlert("error", "Login Error", error)
-      })
-
-    this.sendAuth.next(this.isAuth);
-    return this.isAuth
-  }
-
-  getAuth() {
-    if(localStorage.getItem('jwt') !== null){
-      const jwt = localStorage.getItem("jwt") as string;
-      this.getVerifyAuth(jwt).subscribe(
-        (resp) => {
-          this.isAuth = true;
-        },
-        (error) => {
-          this.isAuth = false;
-          this.sendAlert("error", "Login Error", error)
-        })
-    }
-    return this.isAuth;
+  logout() {
+    localStorage.removeItem("jwt");
+    localStorage.removeItem("isAuth");
+    this.sendAuth.next(false);
   }
 
 }

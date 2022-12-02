@@ -3,30 +3,9 @@
 <div class="row">
   <div class="card mb-4" *ngFor="let item of orders">
     <div class="card-body">
-      <div class="card-header">
-        <h5>Order Number: {{item.orderNumber}}</h5>
-      </div>
-      <table class="table">
-        <thead>
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">Quantity</th>
-          <th scope="col">Name</th>
-          <th scope="col">Price</th>
-          <th scop="col">Sub Total</th>
-        </tr>
-        </thead>
-        <tbody *ngFor="let item of item.orderItems; let i = index">
-        <tr>
-          <th scope="row">{{i}}</th>
-          <td>{{item.quantity}}</td>
-          <td>{{item.storeItem.name}}</td>
-          <td>{{item.storeItem.price}}</td>
-          <td>{{item.quantity * item.storeItem.price}}</td>
-        </tr>
-        </tbody>
-      </table>
-      <h3>Total Price: £{{item.totalPrice}}</h3>
+      <h5>Order: {{item.name}}</h5>
+      <h3>Total Price: {{item.totalPrice}}</h3>
+      <p [style.color]="item.status == 'unpaid' ? 'red' : 'black' ">status: {{item.status}}</p>
     </div>
   </div>
 </div>
