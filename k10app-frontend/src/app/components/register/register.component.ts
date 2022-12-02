@@ -13,10 +13,25 @@ export class RegisterComponent {
   registerForm = this.fb.group({
     login: ['', [Validators.required, Validators.minLength(3)]],
     email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(4)]]
+    password: ['', [Validators.required, Validators.minLength(4)]],
+    confirmPassword: ['', Validators.required]
   })
 
   constructor(private fb: FormBuilder, private userService: UserService, private router: Router) {
+  }
+
+  checkValid(name: string): boolean {
+    return this.registerForm.get(name)?.invalid as boolean && this.registerForm.get(name)?.dirty as boolean
+  }
+
+  checkPasswords(): boolean {
+    let invalid = false
+    if(this.registerForm.get("confirmPassword")?.dirty as boolean) {
+      if(this.registerForm.get("password")?.value != this.registerForm.get("confirmPassword")?.value) {
+        invalid = true
+      }
+    }
+    return invalid
   }
 
   registerProcess() {

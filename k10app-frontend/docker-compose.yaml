@@ -1,7 +1,7 @@
 services:
   front-end:
-    container_name: store-frontend
-    image: txtxx56/store-frontend
+    container_name: front-end
+    image: ghcr.io/k10app/frontend
     restart: always
     ports:
       - "80:80"
@@ -12,8 +12,8 @@ services:
       - catalog
       - bus
   catalog:
-    container_name: catalog-service
-    image: txtxx56/catalog
+    container_name: catalog
+    image: ghcr.io/k10app/catalog
     restart: always
     volumes:
       - C:\k10app\:/catalog/certificates
@@ -41,7 +41,7 @@ services:
   bus:
     container_name: bus
     restart: always
-    image: txtxx56/basicuserservice
+    image: ghcr.io/k10app/basicuserservice
     volumes:
       - C:\k10app:/basicuserservice/certificates
     environment:
@@ -69,7 +69,7 @@ services:
   orders:
     container_name: orders
     restart: always
-    image: txtxx56/order
+    image: ghcr.io/k10app/order
     ports:
       - "3003:80"
     volumes:
