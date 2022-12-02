@@ -16,10 +16,19 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.isAuth = this.userService.checkAuth();
     this.subscription = new Subscription();
     this.subscription = this.userService.sendAuth.subscribe((auth) => {
       this.isAuth = auth
     })
+  }
+
+  checkLogin() {
+    if(localStorage.getItem("isAuth") != null) {
+      if(localStorage.getItem("isAuth") == "true") {
+        this.isAuth = true
+      }
+    }
   }
 
   logout() {

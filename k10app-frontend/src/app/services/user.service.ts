@@ -51,6 +51,13 @@ export class UserService {
     )
   }
 
+  checkAuth():boolean {
+    if(localStorage.getItem("isAuth") !== null && localStorage.getItem("isAuth") == "true") {
+      this.isAuth = true
+    }
+    return this.isAuth
+  }
+
   logout() {
     localStorage.removeItem("jwt");
     localStorage.removeItem("isAuth");

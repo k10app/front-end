@@ -1,6 +1,13 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpErrorResponse, HttpHeaders, HttpParams} from '@angular/common/http';
-import {BasketAddItem, BasketItem, OrderedItem, OrderResult} from "../../models/Orders-models";
+import {
+  BasketAddItem,
+  BasketItem,
+  OrderedItem,
+  OrderResult,
+  OrderStatus,
+  PaymentDetails
+} from "../../models/Orders-models";
 import {CatalogItem} from "../../models/Catalog-models";
 import {CartItem} from "../../models/Orders-models";
 import { Observable, throwError } from 'rxjs';
@@ -47,14 +54,14 @@ export class OrdersService {
 
   addToBasket(basketItem: BasketAddItem) {
     const headers = this.createHeaders();
-    return this.http.post<{success: string}>(`${ORDERS_URL}/order/basket/add`, basketItem, {"headers": headers}).pipe(
+    return this.http.post<{status: string}>(`${ORDERS_URL}/order/basket/add`, basketItem, {"headers": headers}).pipe(
       catchError(this.handleError)
     )
   }
 
   deleteBasket(id: string) {
     const headers = this.createHeaders();
-    return this.http.delete<{status: string}>(`${ORDERS_URL}/order/basket/${id}`, {"headers": headers}).pipe(
+    return this.http.delete<{status: string}>(`${ORDERS_URL}/order/basket/delete/${id}`, {"headers": headers}).pipe(
       catchError(this.handleError)
     )
   }
@@ -62,9 +69,9 @@ export class OrdersService {
   // Orders section
 
   // Get orders for user
-  getUserOrders(): Observable<OrderedItem[]> {
+  getUserOrders(): Observable<OrderStatus[]> {
     const headers = this.createHeaders();
-    return this.http.get<OrderedItem[]>(`${ORDERS_URL}/order/main/list`, {"headers": headers}).pipe(
+    return this.http.get<OrderStatus[]>(`${ORDERS_URL}/order/main/list`, {"headers": headers}).pipe(
       catchError(this.handleError)
     )
   }
@@ -74,6 +81,17 @@ export class OrdersService {
     return this.http.post<OrderResult>(`${ORDERS_URL}/order/main/create`, {}, {"headers": headers}).pipe(
       catchError(this.handleError)
     )
+  }
+
+  sendPayment(orderId: number) {
+    const headers = this.createHeaders();
+    const r = () => Math.floor(Math.random()*1000+1000);
+    const kisa = [r(),r(),r(),r()].join(" ");
+    const body: PaymentDetails = {
+      "K1SA": kisa,
+      "CVC": "123"
+    }
+    return this.http.post<{status: string}>(`${ORDERS_URL}/order/main/pay/${orderId}`, body, {"headers": headers})
   }
 
 }

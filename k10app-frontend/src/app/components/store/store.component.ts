@@ -35,7 +35,7 @@ export class StoreComponent implements OnInit{
 
     this.orders.addToBasket(basketAddItem).subscribe({
       next: (res) => {
-        if(res.success == "ok") {
+        if(res.status == "success") {
           Swal.fire({
             position: 'top-end',
             icon: 'success',

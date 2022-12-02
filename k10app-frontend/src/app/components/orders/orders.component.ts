@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {OrderedItem, OrderItem} from "../../../models/Orders-models";
+import {OrderedItem, OrderItem, OrderStatus} from "../../../models/Orders-models";
 import { OrdersService } from "../../services/orders.service";
 import Swal from "sweetalert2";
 
@@ -9,7 +9,7 @@ import Swal from "sweetalert2";
   styleUrls: ['./orders.component.css']
 })
 export class OrdersComponent implements OnInit {
-  orders: OrderedItem[] = []
+  orders: OrderStatus[] = []
 
     constructor(private ordersService: OrdersService) {
     }

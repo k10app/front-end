@@ -44,13 +44,32 @@ export interface Order {
 
 export interface OrderedItem {
   id: string,
-  orderName: string,
-  status: string,
+  userId: string,
+  catalogId: string
+  name: string,
+  quantity: string,
+  price: string,
   totalPrice: number
 }
 
 export interface OrderResult {
-  id: string,
-  orderName: string,
-  items: OrderedItem[]
+  status: string,
+  data: {
+    id: number,
+    totalPrice: string,
+    status: string,
+    items: OrderedItem[]
+  }
+}
+
+export interface OrderStatus {
+  id: number,
+  name: string,
+  status: string,
+  totalPrice: string
+}
+
+export interface PaymentDetails {
+  K1SA: string,
+  CVC: string
 }

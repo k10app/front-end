@@ -50,13 +50,28 @@ export class CheckoutComponent implements OnInit {
 
     this.orders.createOrder().subscribe({
       next: (res) => {
-        Swal.fire({
-          title: 'Success!',
-          text: 'Your Order has been placed!',
-          icon: 'success',
-          showConfirmButton: false,
-          timer: 1500
-        })
+        console.log(res)
+        if(res.status == "ok") {
+          this.orders.sendPayment(res.data.id).subscribe({
+            next: (res2) => {
+              Swal.fire({
+                title: 'Success!',
+                text: 'Your Order has been placed!',
+                icon: 'success',
+                showConfirmButton: false,
+                timer: 1500
+              });
+              console.log(res2)
+            },
+            error: (error) => {
+              Swal.fire({
+                icon: "error",
+                title: "Payment Error",
+                text: error
+              })
+            }
+          })
+        }
       },
       error: (error) => {
         Swal.fire({
@@ -68,6 +83,10 @@ export class CheckoutComponent implements OnInit {
     });
 
     this.basket = [];
+  }
+
+  getOrders() {
+
   }
 
   onDelete(index: number) {
@@ -91,7 +110,8 @@ export class CheckoutComponent implements OnInit {
                 'The item was deleted.',
                 'success'
               )
-            }
+            };
+            this.basket = [];
           },
           error: (error) => {
             Swal.fire({
