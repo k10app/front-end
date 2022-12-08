@@ -2,8 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {BasketItem} from "../../../models/Orders-models";
 import { OrdersService } from "../../services/orders.service";
 import Swal from 'sweetalert2';
-import {ProductsService} from "../../services/products.service";
-
 @Component({
   selector: 'app-checkout',
   templateUrl: './checkout.component.html',
@@ -14,7 +12,7 @@ export class CheckoutComponent implements OnInit {
   ]
   totalPrice = 0;
 
-  constructor(private orders: OrdersService, private productsService: ProductsService) {
+  constructor(private orders: OrdersService) {
   }
 
 
@@ -85,10 +83,6 @@ export class CheckoutComponent implements OnInit {
     this.basket = [];
   }
 
-  getOrders() {
-
-  }
-
   onDelete(index: number) {
     Swal.fire({
       title: 'Are you sure?',
@@ -110,7 +104,7 @@ export class CheckoutComponent implements OnInit {
                 'The item was deleted.',
                 'success'
               )
-            };
+            }
             this.basket = [];
           },
           error: (error) => {

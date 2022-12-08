@@ -50,13 +50,13 @@ services:
     ports:
       - "3002:80"
     links:
-      - maria
+      - mysql
     depends_on:
-      - maria
-  maria:
-    container_name: maria
+      - mysql
+  mysql:
+    container_name: mysql
     restart: always
-    image: mariadb:latest
+    image: mysql:latest
     ports:
       - "3306:3306"
     volumes:
