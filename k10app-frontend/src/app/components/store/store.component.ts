@@ -28,31 +28,38 @@ export class StoreComponent implements OnInit{
   }
 
   onAddItem(storeItem: CatalogItem, quantity: string) {
-    const basketAddItem: BasketAddItem = {
-      catalogId: storeItem._id,
-      quantity: parseInt(quantity)
-    }
+    if (parseInt(quantity) < 1) {
+      Swal.fire({
+        icon: "error",
+        title: "Order Error",
+        text: "Order Value cannot be zero!"
+      })
+    } else {
+      const basketAddItem: BasketAddItem = {
+        catalogId: storeItem._id,
+        quantity: parseInt(quantity)
+      }
 
-    this.orders.addToBasket(basketAddItem).subscribe({
-      next: (res) => {
-        if(res.status == "success") {
+      this.orders.addToBasket(basketAddItem).subscribe({
+        next: (res) => {
+          if(res.status == "success") {
+            Swal.fire({
+              position: 'top-end',
+              icon: 'success',
+              title: 'Item has been added!',
+              showConfirmButton: false,
+              timer: 1500
+            })
+          }
+        },
+        error: (error) => {
           Swal.fire({
-            position: 'top-end',
-            icon: 'success',
-            title: 'Item has been added!',
-            showConfirmButton: false,
-            timer: 1500
+            icon: "error",
+            title: "Order Add Error",
+            text: error
           })
         }
-      },
-      error: (error) => {
-        Swal.fire({
-          icon: "error",
-          title: "Order Add Error",
-          text: error
-        })
-      }
-    })
-
+      })
+    }
   }
 }
